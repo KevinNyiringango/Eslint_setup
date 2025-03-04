@@ -1,3 +1,4 @@
+// filepath: /C:/Users/KevinNyiringango/Eslint_setup/bookshop/eslint.config.mjs
 import globals from "globals";
 import pluginJs from "@eslint/js";
 
@@ -19,7 +20,9 @@ export default [
     rules: {
       "no-unused-vars": "warn",
       "arrow-body-style": ["error", "always"],
-      "quotes": ["error", "double"]
+      "quotes": ["error", "double"],
+      "camelcase": ["error", { "properties": "always" }],
+      // "id-length": ["error", { "min": 2, "max": 30 }]
     }
   }
 ];

@@ -1,8 +1,7 @@
 const cds = require("@sap/cds")
 
 module.exports = class CatalogService extends cds.ApplicationService { init() {
- const kev='keving'
- const sayHello= ()=> return console.log("hello mr kevin")
+ 
   const { Books } = cds.entities("sap.capire.bookshop")
   const { ListOfBooks } = this.entities
 
