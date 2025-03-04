@@ -1,24 +1,24 @@
-const cds = require("@sap/cds")
+const cds = require('@sap/cds')
 
 module.exports = class CatalogService extends cds.ApplicationService { init() {
- const kev="keving"
+ const kev='keving'
  const sayHello= ()=> {return console.log("hello mr kevin")}
-  const { Books } = cds.entities("sap.capire.bookshop")
+  const { Books } = cds.entities('sap.capire.bookshop')
   const { ListOfBooks } = this.entities
 
   // Add some discount for overstocked books
-  this.after("each", ListOfBooks, book => {
-    if (book.stock > 111) book.title += " -- 11% discount!"
+  this.after('each', ListOfBooks, book => {
+    if (book.stock > 111) book.title += ` -- 11% discount!`
   })
 
   // Reduce stock of ordered books if available stock suffices
-  this.on("submitOrder", async req => {
+  this.on('submitOrder', async req => {
     let { book:id, quantity } = req.data
     let book = await SELECT.one.from (Books, id, b => {return b.stock})
 
     // Validate input data
     if (!book) return req.error (404, `Book #${id} doesn't exist`)
-    if (quantity < 1) return req.error (400, "quantity has to be 1 or more")
+    if (quantity < 1) return req.error (400, `quantity has to be 1 or more`)
     if (!book.stock || quantity > book.stock) return req.error (409, `${quantity} exceeds stock for book #${id}`)
 
     // Reduce stock in database and return updated stock value
@@ -27,9 +27,9 @@ module.exports = class CatalogService extends cds.ApplicationService { init() {
   })
 
   // Emit event when an order has been submitted
-  this.after("submitOrder", async (_,req) => {
+  this.after('submitOrder', async (_,req) => {
     let { book, quantity } = req.data
-    await this.emit("OrderedBook", { book, quantity, buyer: req.user.id })
+    await this.emit('OrderedBook', { book, quantity, buyer: req.user.id })
   })
 
   // Delegate requests to the underlying generic service
